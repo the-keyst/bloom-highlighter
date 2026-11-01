@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.15.0] - 2026-11-02
+### Added
+- Shared language-independent constructs for declarations, calls, flow, mutations, components, routes, handlers, validation, authorization and server/client boundaries.
+- Extensible language and framework adapter registries, with first-pass local recognition for common full-stack framework conventions.
+- Centralized VS Code language IDs and documented how to add coverage.
+
+### Improved
+- JS/TS framework import recognition avoids creating a TypeScript program and skips framework tree traversal when no relevant framework is detected.
+- Combined conventional-language keyword scanning and cached construct/category spans.
+- Viewport span indexes reduce full-file scanning while scrolling large documents.
+
 ## [0.14.0] - 2026-10-08
 ### Changed
 - Neutral geometric logo and gold-and-purple branding for the extension icon, README, installation page and promotional artwork.

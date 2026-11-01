@@ -1,21 +1,17 @@
-# Bloom 0.14.0
+# Bloom 0.15.0
 
-Bloom helps students and beginners learn programming, developers read unfamiliar or complex code, and people who find visual cues helpful for focus and navigation. Choose Operational, Interfaces, Structural or Dangerous views while keeping your existing editor theme and customizable category colors.
+Bloom now analyzes code through a shared construct model. Language adapters report common syntax concepts such as declarations, calls, control flow, mutations and scopes; framework adapters add local cues such as routes, handlers, components, validation and server/client boundaries. These constructs feed Bloom’s existing views and category colors.
 
-This release introduces neutral geometric branding in gold and purple, refreshed promotional images, organized media folders and clearer audience and usage documentation.
+This release adds first-pass local framework recognition for common JavaScript/TypeScript, Python, C#, Java, PHP and Ruby stacks. Recognition is conservative and file-local; it does not resolve aliases, dependencies or behavior across a project. See [Shared construct analysis](CONSTRUCTS.md) for the current coverage and limits.
 
-Two bugs are fixed: the highlighting toggle now respects existing folder settings, and unexpected analysis-worker exits settle pending requests instead of leaving them hanging.
+Analysis and scrolling are also more efficient: JS/TS framework import checks no longer create a TypeScript program, irrelevant framework tree walks are skipped, conventional keyword checks use a combined scan, and scrolling uses cached viewport span indexes.
 
 ## Quick install
 
-1. Download **bloom-highlighter-0.14.0.vsix** from the assets below.
+1. Download **bloom-highlighter-0.15.0.vsix** from the assets below.
 2. In desktop VS Code, run **Extensions: Install from VSIX…** and select the file.
 3. Run **Developer: Reload Window**, open a code file, then run **Bloom: Show Sidebar**.
 
 Requires VS Code 1.95 or newer. [Full installation guide](https://github.com/theokeist/bloom-highlighter/blob/main/INSTALL.md).
 
-Highlights are lexical reading aids. Function rules may include constructors; Dangerous view supplies review cues rather than security findings. Unsupported languages retain ordinary editor highlighting.
-
-Publisher: **theokeist-hcode-org**. Marketplace links require a published listing. The downloadable VSIX works independently of a store listing.
-
-Validated locally: 63 automated tests, lint, visually inspected branding images and VSIX asset inclusion. Live VS Code interaction for these changes and Marketplace publication remain unverified.
+Highlights remain lexical reading aids. Framework recognition is not project-wide semantic analysis, and Dangerous view provides review cues rather than security findings.
