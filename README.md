@@ -41,6 +41,8 @@ Tags: syntax highlighting, code reading, functions, Dart, Flutter, JavaScript, T
 
 [Usage](docs/USAGE.md) · [Improvements](docs/IMPROVEMENTS.md) · [Contributing](CONTRIBUTING.md)
 
+The language independent analysis model and current framework recognition levels are documented in [Shared construct analysis](docs/CONSTRUCTS.md).
+
 
 All view choices, highlighting switches, dimming, language controls, category colors,
 and examples live together in the expanded **Code Highlighting** sidebar section.

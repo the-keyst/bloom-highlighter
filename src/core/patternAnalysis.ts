@@ -2,8 +2,25 @@ import * as ts from 'typescript';
 import type { CodeAnalysis, Span, SyntaxAnalysis } from './codeAnalysis';
 import type { LanguageSchema } from './loader';
 import type { OperationalKey } from './schemaParser';
+import { constructCategories } from './constructs';
 
 const nameKeys: OperationalKey[] = ['alert', 'logic', 'mutation', 'guards', 'anchor', 'interface', 'native', 'prototype', 'structural'];
+const constructSpanCache = new WeakMap<CodeAnalysis, Map<OperationalKey, Span[]>>();
+
+function constructSpans(analysis: CodeAnalysis): Map<OperationalKey, Span[]> {
+    let indexed = constructSpanCache.get(analysis);
+    if (indexed) return indexed;
+    indexed = new Map();
+    for (const construct of analysis.constructs) {
+        for (const key of constructCategories[construct.kind] ?? []) {
+            const spans = indexed.get(key);
+            if (spans) spans.push(construct);
+            else indexed.set(key, [construct]);
+        }
+    }
+    constructSpanCache.set(analysis, indexed);
+    return indexed;
+}
 
 function builder() {
     const syntax: SyntaxAnalysis = { tokens: [], exclusions: {} };
@@ -234,5 +251,6 @@ export function categorySpans(analysis: CodeAnalysis, schema: LanguageSchema, ke
     }
     for (const token of analysis.syntax?.tokens ?? []) if (token.key === key) add(token);
     for (const token of analysis.tokens) if (token.key === key) add(token);
+    for (const construct of constructSpans(analysis).get(key) ?? []) add(construct);
     return [...unique.values()];
 }

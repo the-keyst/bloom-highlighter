@@ -2,6 +2,7 @@ import type { DecorationRenderOptions } from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parseMarkdown, categories, OperationalKey, SerializedMapping } from './schemaParser';
+import { LanguageSchemaAliases } from './languageIds';
 
 export interface LanguageSchema {
     id: string;
@@ -38,10 +39,6 @@ export class UniversalLoader {
     }
 
     public static getSchema(languageId: string): LanguageSchema | null {
-        const aliases: Record<string, string> = {
-            javascriptreact: 'javascript', typescriptreact: 'typescript',
-            vue: 'typescript', svelte: 'typescript', c: 'cpp', 'objective-c': 'cpp', 'objective-cpp': 'cpp'
-        };
-        return this.schemas.get(languageId) ?? this.schemas.get(aliases[languageId]) ?? null;
+        return this.schemas.get(languageId) ?? this.schemas.get(LanguageSchemaAliases[languageId]) ?? null;
     }
 }

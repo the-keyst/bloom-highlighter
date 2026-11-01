@@ -25,6 +25,16 @@ interface CachedAnalysis {
     frameworks: boolean;
     analysis: CodeAnalysis;
 }
+interface SpanIndex {
+    spans: Span[];
+    prefixMaxEnd: number[];
+}
+interface PreparedSpans {
+    schema: LanguageSchema;
+    categories: Map<OperationalKey, SpanIndex>;
+    noise: SpanIndex;
+    layers?: SpanIndex[];
+}
 
 const lightColors: Record<OperationalKey, string> = {
     alert: '#b42342', logic: '#006875', mutation: '#9b4900', guards: '#126741',
@@ -37,7 +47,7 @@ export class BloomPainter {
     private blockDecorations: vscode.TextEditorDecorationType[] = [];
     private blockSets = new Map<ViewMode, vscode.TextEditorDecorationType[]>();
     private applied = new WeakMap<vscode.TextEditor, { document: vscode.TextDocument; version: number; ranges: Map<vscode.TextEditorDecorationType, vscode.Range[]> }>();
-    private spans = new WeakMap<CodeAnalysis, { schema: LanguageSchema; categories: Map<OperationalKey, Span[]>; noise: Span[]; layers?: Span[][] }>();
+    private spans = new WeakMap<CodeAnalysis, PreparedSpans>();
     private dimmers = new Map<number, vscode.TextEditorDecorationType>();
     private cache = new WeakMap<vscode.TextDocument, CachedAnalysis>();
     private pending = new Map<vscode.TextEditor, ReturnType<typeof setTimeout>>();
@@ -147,22 +157,31 @@ export class BloomPainter {
         const next = new Map<vscode.TextEditorDecorationType, vscode.Range[]>();
         let indexed = this.spans.get(analysis);
         if (!indexed || indexed.schema !== schema) {
-            indexed = { schema, categories: new Map(), noise: Array.from(analysis.code.matchAll(/\S+/g),
-                match => ({ start: match.index!, end: match.index! + match[0].length })) };
+            indexed = { schema, categories: new Map(), noise: makeSpanIndex(Array.from(analysis.code.matchAll(/\S+/g),
+                match => ({ start: match.index!, end: match.index! + match[0].length }))) };
             this.spans.set(analysis, indexed);
         }
         const viewport: Span[] = editor.visibleRanges.length ? editor.visibleRanges.map(range => ({
             start: document.offsetAt(document.lineAt(Math.max(0, range.start.line - 20)).range.start),
             end: document.offsetAt(document.lineAt(Math.min(document.lineCount - 1, range.end.line + 20)).range.end)
         })) : [{ start: 0, end: text.length }];
-        const visible = (span: Span): boolean => viewport.some(window => span.end > window.start && span.start < window.end);
         const rangeOf = (span: Span) => new vscode.Range(document.positionAt(span.start), document.positionAt(span.end));
-        const clippedRanges = (spans: Span[]) => {
+        const clippedRanges = (index: SpanIndex) => {
             const clipped = new Map<string, Span>();
-            for (const span of spans) for (const window of viewport) {
-                const start = Math.max(span.start, window.start);
-                const end = Math.min(span.end, window.end);
-                if (start < end) clipped.set(`${start}:${end}`, { start, end });
+            for (const window of viewport) {
+                let low = 0;
+                let high = index.prefixMaxEnd.length;
+                while (low < high) {
+                    const mid = (low + high) >>> 1;
+                    if (index.prefixMaxEnd[mid] <= window.start) low = mid + 1;
+                    else high = mid;
+                }
+                for (let i = low; i < index.spans.length && index.spans[i].start < window.end; i++) {
+                    const span = index.spans[i];
+                    const start = Math.max(span.start, window.start);
+                    const end = Math.min(span.end, window.end);
+                    if (start < end) clipped.set(`${start}:${end}`, { start, end });
+                }
             }
             return [...clipped.values()].map(rangeOf);
         };
@@ -180,8 +199,8 @@ export class BloomPainter {
         }
         // Structural emphasis belongs to declarations, not a wash over every scope body.
         if (this.currentMode !== ViewMode.Structural && this.currentMode !== ViewMode.Dangerous) {
-            indexed.layers ??= getDepthAnalysis(document, analysis).layers.map(ranges =>
-                ranges.map(range => ({ start: document.offsetAt(range.start), end: document.offsetAt(range.end) })));
+            indexed.layers ??= getDepthAnalysis(document, analysis).layers.map(ranges => makeSpanIndex(
+                ranges.map(range => ({ start: document.offsetAt(range.start), end: document.offsetAt(range.end) }))));
             indexed.layers.forEach((spans, index) => next.set(this.blockDecorations[index], clippedRanges(spans)));
         }
         const paint = () => {
@@ -194,10 +213,10 @@ export class BloomPainter {
                 if (!type || !mapping) continue;
                 let spans = indexed!.categories.get(key);
                 if (!spans) {
-                    spans = categorySpans(analysis, schema, key);
+                    spans = makeSpanIndex(categorySpans(analysis, schema, key));
                     indexed!.categories.set(key, spans);
                 }
-                next.set(type, clippedRanges(spans.filter(visible)));
+                next.set(type, clippedRanges(spans));
             }
             const previous = this.applied.get(editor);
             const sameVersion = previous?.document === document && previous.version === document.version;
@@ -232,4 +251,15 @@ export class BloomPainter {
         this.languageDecorations.clear();
         this.dimmers.clear();
     }
+}
+
+function makeSpanIndex(input: Span[]): SpanIndex {
+    const spans = input.slice().sort((left, right) => left.start - right.start || left.end - right.end);
+    const prefixMaxEnd = new Array<number>(spans.length);
+    let maxEnd = -1;
+    for (let i = 0; i < spans.length; i++) {
+        maxEnd = Math.max(maxEnd, spans[i].end);
+        prefixMaxEnd[i] = maxEnd;
+    }
+    return { spans, prefixMaxEnd };
 }
