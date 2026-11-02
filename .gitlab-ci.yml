@@ -24,8 +24,8 @@ validate:
     - npm ci --cache .npm --prefer-offline
     - npm test
     - npm run lint
-    - npm run package
+    - npm run package:build
   artifacts:
     paths:
-      - '*.vsix'
+      - 'bloom-highlighter-*+build.$CI_PIPELINE_IID.attempt.1.vsix'
     expire_in: 1 week

@@ -27,6 +27,10 @@ git push -u origin main
 
 The ignore file excludes `node_modules`, compiled output, test profiles, VSIX files and environment credentials. CI installs locked dependencies, runs tests/lint and uploads a VSIX artifact. Keep `package-lock.json` committed.
 
+CI validation builds use SemVer build metadata such as `0.15.0+build.42.attempt.1`. GitLab uses its incrementing pipeline IID; GitHub uses the workflow run number and attempt. The package manifest is restored after packaging, so these artifact identifiers do not change the committed release version. Tagged release packages continue to use the exact version from `package.json`.
+
+For a local numbered artifact, run `npm run package:build -- --build-number 42`. CI provides the build number automatically.
+
 ## Release a downloadable package
 
 ```sh

@@ -45,7 +45,8 @@
       "bloom": [
         {
           "id": "bloom.controls",
-          "name": "Code Views"
+          "name": "Code Views",
+          "type": "webview"
         }
       ]
     },
@@ -81,6 +82,10 @@
       {
         "command": "bloom.toggleInstant",
         "title": "Bloom: Toggle Instant Switching"
+      },
+      {
+        "command": "bloom.toggleFrameworks",
+        "title": "Bloom: Toggle Framework Cues"
       },
       {
         "command": "bloom.showSidebar",
@@ -339,10 +344,11 @@
     "test": "node --test tests/*.test.js",
     "generate-rules": "node scripts/generate-language-rules.js",
     "package": "vsce package",
+    "package:build": "node scripts/package-build.js",
     "configure-release": "node scripts/release-links.js",
     "check-release": "node scripts/release-links.js --check",
     "publish:marketplace": "npm run check-release && vsce publish",
-    "render-doc-images": "npm run compile && node scripts/render-doc-images.js"
+    "render-doc-images": "npm run compile && node scripts/render-doc-images.js && node scripts/render-example-images.js"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

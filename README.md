@@ -27,13 +27,13 @@ Marketplace links activate after the listing is published.
 
 ![Illustrated Dart example showing Operational, Interfaces, Structural and Dangerous highlighting](media/store/bloom-views.png)
 
-Open the Bloom icon in the Activity Bar. Expand a category to toggle it or choose its color. Your choices apply across files of that language.
+Open the Bloom icon in the Activity Bar and select one of the four view buttons. Below the divider, adjust dimming, timing and other settings. Expand **Categories and colors** to change category switches or colors for the current language.
 
 ## Get started
 
 Download the build artifact (GitHub sign-in may be required), unzip it, and run **Extensions: Install from VSIX…** in VS Code. Select the `.vsix`, then run **Developer: Reload Window** and **Bloom: Show Sidebar**.
 
-Supports Dart/Flutter, JavaScript/TypeScript, Python, Rust, Go and many more. Includes React, Vue and Svelte recognition. Requires desktop VS Code 1.95+.
+Supports Dart/Flutter, JavaScript/TypeScript, Python, Rust, Go and many more. Includes local framework cues for FastAPI, React, Vue, Svelte, Express-family routers, NestJS, Angular, Next.js, Nuxt, SvelteKit and Astro. Browse the [language and framework examples](samples/README.md). Requires desktop VS Code 1.95+.
 
 Bloom is a reading aid: lexical rules can be approximate, and Dangerous highlights are review cues.
 
@@ -44,8 +44,7 @@ Tags: syntax highlighting, code reading, functions, Dart, Flutter, JavaScript, T
 The language independent analysis model and current framework recognition levels are documented in [Shared construct analysis](docs/CONSTRUCTS.md).
 
 
-All view choices, highlighting switches, dimming, language controls, category colors,
-and examples live together in the expanded **Code Highlighting** sidebar section.
+Four view buttons sit at the top of the Bloom sidebar. **Adjustments** and **Manual categories** follow below dividers, with language controls, dimming, timing, framework cues and category colors.
 View switching is instant by default (`bloom.speed: 0`). If you configure a delay,
 Bloom keeps the previous highlights visible until their replacements are ready.
 Scrolling reuses analyzed category spans and scope layers; unchanged decoration

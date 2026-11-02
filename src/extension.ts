@@ -106,7 +106,7 @@ export function activate(context: vscode.ExtensionContext): void {
             vscode.workspace.workspaceFolders?.length ? vscode.ConfigurationTarget.Workspace : vscode.ConfigurationTarget.Global;
         await config.update('enabled', !config.get('enabled', true), target);
     };
-    const updateSetting = async (name: string, value: number) => {
+    const updateSetting = async (name: string, value: number | boolean) => {
         const resource = vscode.window.activeTextEditor?.document.uri;
         const config = vscode.workspace.getConfiguration('bloom', resource);
         const folderOverride = config.inspect(name)?.workspaceFolderValue !== undefined;
@@ -181,6 +181,10 @@ export function activate(context: vscode.ExtensionContext): void {
             const saved = context.workspaceState.get<number>('bloom.previousSpeed', 300);
             if (speed > 0) await context.workspaceState.update('bloom.previousSpeed', speed);
             await updateSetting('speed', speed === 0 ? saved > 0 ? saved : 300 : 0);
+        }),
+        vscode.commands.registerCommand('bloom.toggleFrameworks', async () => {
+            const enabled = vscode.workspace.getConfiguration('bloom', vscode.window.activeTextEditor?.document.uri).get('frameworks', true);
+            await updateSetting('frameworks', !enabled);
         }),
         vscode.commands.registerCommand('bloom.viewOperational', () => setMode(ViewMode.Operational)),
         vscode.commands.registerCommand('bloom.viewInterfaces', () => setMode(ViewMode.Interfaces)),

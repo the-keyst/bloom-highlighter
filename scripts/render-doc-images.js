@@ -16,7 +16,7 @@ write('bloom-overview.png', 1600, 440,
     text(430, 145, 68, 'Bloom Syntax Highlighter') + text(430, 215, 34, 'Make code easier to read.', '#E1D5EF') +
     text(430, 290, 27, 'Flow  •  Functions  •  Structure  •  Risk review', '#E8BC59') +
     text(430, 350, 24, 'Four views. Your colors. Language-wide switches.', '#E1D5EF'));
-const code = `class Counter {\n  final int limit = 10;\n  void increment() {\n    if (count < limit) count += 1;\n    save(count);\n    Process.run(command, []);\n  }\n}`;
+const code = `Future<void> _reset() async {\n  setState(() => _loading = true);\n  await Future<void>.delayed(_resetDelay);\n  if (!mounted) return;\n  setState(() => _count = 0);\n  if (mounted) setState(() => _loading = false);\n}`;
 const masked = analyzeCode(code, 'dart').code;
 const views = [
     ['Operational', 'Follow flow and state changes', ['alert', 'logic', 'guards', 'mutation']],
@@ -40,7 +40,7 @@ views.forEach(([title, subtitle, categories], index) => {
         text(x + 30, y + 48, 30, title) + text(x + 30, y + 83, 21, subtitle, '#E1D5EF');
     let offset = 0;
     code.split('\n').forEach((line, lineIndex) => {
-        panels += `<text x="${x + 30}" y="${y + 135 + lineIndex * 33}" xml:space="preserve" font-family="Consolas,monospace" font-size="24">`;
+        panels += `<text x="${x + 30}" y="${y + 135 + lineIndex * 30}" xml:space="preserve" font-family="Consolas,monospace" font-size="20">`;
         for (let i = 0; i < line.length; i++) panels += `<tspan fill="${colors[offset + i]}">${escape(line[i])}</tspan>`;
         panels += '</text>';
         offset += line.length + 1;

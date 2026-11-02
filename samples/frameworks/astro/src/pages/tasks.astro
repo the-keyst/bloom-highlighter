@@ -1,0 +1,11 @@
+---
+const response = await fetch('https://example.test/api/tasks');
+const tasks = response.ok ? await response.json() : [];
+---
+
+<main>
+  <h1>Tasks</h1>
+  <ul>
+    {tasks.map((task) => <li>{task.title}</li>)}
+  </ul>
+</main>
