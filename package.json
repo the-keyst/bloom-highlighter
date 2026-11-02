@@ -16,6 +16,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
+    "onView:bloom.controls",
     "onLanguage:dart",
     "onLanguage:typescript",
     "onLanguage:javascript",
