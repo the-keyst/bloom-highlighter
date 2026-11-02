@@ -25,6 +25,15 @@ Marketplace links activate after the listing is published.
 - **Structural** — spot declarations, imports and stable values.
 - **Dangerous** — review potentially risky operations, with optional stronger focus.
 
+Examples from framework and language samples:
+
+| View | Framework example | Language example | What to notice |
+| --- | --- | --- | --- |
+| **Operational** | [React counter](samples/frameworks/Counter.tsx) | [Python task queue](samples/languages/task_queue.py) | Conditions, state changes, returns and effects. |
+| **Interfaces** | [FastAPI routes](samples/frameworks/fastapi/tasks.py) | [Go task queue](samples/languages/task_queue.go) | Route handlers, functions, calls and component or API boundaries. |
+| **Structural** | [Vue counter](samples/frameworks/Counter.vue) | [Java task queue](samples/languages/TaskQueue.java) | Imports, classes, declarations and stable values. |
+| **Dangerous** | [Flutter counter](samples/frameworks/Counter.dart) | [Python task queue](samples/languages/task_queue.py) | Review cues include process execution, deletion and dynamic evaluation. For example, Python `subprocess.run(command)` is highlighted; this is a lexical cue, not a security finding. |
+
 ![Illustrated Dart example showing Operational, Interfaces, Structural and Dangerous highlighting](media/store/bloom-views.png)
 
 Open the Bloom icon in the Activity Bar and select one of the four view buttons. Below the divider, adjust dimming, timing and other settings. Expand **Categories and colors** to change category switches or colors for the current language.

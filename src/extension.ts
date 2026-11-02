@@ -12,6 +12,10 @@ export function activate(context: vscode.ExtensionContext): void {
     const output = vscode.window.createOutputChannel('Bloom');
     const definitions = path.join(context.extensionPath, 'out', 'core', 'definitions.json');
     const sourceDefinitions = path.join(context.extensionPath, 'src', 'core', 'definitions');
+    const painter = new BloomPainter();
+    // Register the view before loading definitions so the sidebar remains available
+    // even if a packaged language rule is malformed or missing.
+    const sidebar = registerSidebar(() => ({ mode: painter.mode, categories: painter.categories }));
     try {
         UniversalLoader.loadStatic(JSON.parse(fs.readFileSync(definitions, 'utf8')));
         if (context.extensionMode === vscode.ExtensionMode.Development && fs.existsSync(sourceDefinitions)) {
@@ -20,11 +24,7 @@ export function activate(context: vscode.ExtensionContext): void {
     } catch (error) {
         output.appendLine(String(error));
         void vscode.window.showErrorMessage('Bloom could not load its language definitions. See the Bloom output channel.');
-        context.subscriptions.push(output);
-        return;
     }
-    const painter = new BloomPainter();
-    const sidebar = registerSidebar(() => ({ mode: painter.mode, categories: painter.categories }));
     const analyzer = new AnalysisService();
     const generations = new WeakMap<vscode.TextEditor, number>();
     const pending = new Map<vscode.TextEditor, ReturnType<typeof setTimeout>>();
