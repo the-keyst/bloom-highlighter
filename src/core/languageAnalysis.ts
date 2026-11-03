@@ -52,6 +52,18 @@ const languageConstructWords: Record<string, Record<string, Parameters<typeof ad
     lua: { function: 'declaration', local: 'declaration', require: 'module', if: 'branch', elseif: 'branch', for: 'loop', while: 'loop', repeat: 'loop' },
     matlab: { function: 'declaration', classdef: 'type', properties: 'type', methods: 'type', if: 'branch', switch: 'branch', for: 'loop', parfor: 'loop', while: 'loop', try: 'error-handling' },
     julia: { module: 'module', using: 'module', import: 'module', function: 'declaration', struct: 'type', mutable: 'type', abstract: 'type', if: 'branch', elseif: 'branch', for: 'loop', while: 'loop', try: 'error-handling' },
+    'objective-c': { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
+    'objective-cpp': { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
+    'cuda-cpp': { __global__: 'function', __device__: 'function', __host__: 'function', __shared__: 'declaration', struct: 'type', class: 'type', namespace: 'module' },
+    glsl: { struct: 'type', uniform: 'declaration', buffer: 'declaration', layout: 'declaration', in: 'declaration', out: 'declaration', if: 'branch', for: 'loop', while: 'loop' },
+    hlsl: { struct: 'type', cbuffer: 'declaration', tbuffer: 'declaration', interface: 'type', if: 'branch', for: 'loop', while: 'loop' },
+    coffeescript: { class: 'type', extends: 'type', if: 'branch', unless: 'branch', switch: 'branch', when: 'branch', for: 'loop', while: 'loop', until: 'loop' },
+    elixir: { defmodule: 'module', defprotocol: 'type', defimpl: 'type', defstruct: 'type', defrecord: 'type', def: 'function', defp: 'function', defmacro: 'function', defguard: 'function', if: 'branch', unless: 'branch', case: 'branch', cond: 'branch', with: 'branch', for: 'loop', try: 'error-handling', rescue: 'error-handling', catch: 'error-handling' },
+    r: { library: 'module', require: 'module', source: 'module', function: 'function', if: 'branch', else: 'branch', for: 'loop', while: 'loop', repeat: 'loop', tryCatch: 'error-handling' },
+    razor: { namespace: 'module', using: 'module', class: 'type', interface: 'type', record: 'type', if: 'branch', foreach: 'loop', for: 'loop' },
+    astro: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
+    vue: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
+    svelte: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
 };
 
 const sExpressionLanguages = [LanguageId.lisp, LanguageId.scheme, LanguageId.clojure] as const;
