@@ -1,0 +1,19 @@
+{
+    "bloom.enabled": true,
+    "bloom.speed": 300,
+    "bloom.languageSettings": {
+        "typescript": {
+            "dangerousEmphasis": false,
+            "colors": {
+                "danger": "#fbbf24",
+                "interface": "#a855f7"
+            },
+            "enabled": true,
+            "categories": {
+                "logic": true,
+                "alert": true
+            }
+        }
+    },
+    "bloom.frameworks": false
+}

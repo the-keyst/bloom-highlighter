@@ -34,7 +34,7 @@ Examples from framework and language samples:
 | **Structural** | [Vue counter](samples/frameworks/Counter.vue) | [Java task queue](samples/languages/TaskQueue.java) | Imports, classes, declarations and stable values. |
 | **Dangerous** | [Flutter counter](samples/frameworks/Counter.dart) | [Python task queue](samples/languages/task_queue.py) | Review cues include process execution, deletion and dynamic evaluation. For example, Python `subprocess.run(command)` is highlighted; this is a lexical cue, not a security finding. |
 
-![Illustrated Dart example showing Operational, Interfaces, Structural and Dangerous highlighting](media/store/bloom-views.png)
+![Indented JavaScript and Python task runner examples showing Operational, Interfaces, Structural and Dangerous highlighting](media/store/bloom-javascript-views.svg)
 
 Open the Bloom icon in the Activity Bar and select one of the four view buttons. Below the divider, adjust dimming, timing and other settings. Expand **Categories and colors** to change category switches or colors for the current language.
 

@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"os/exec"
+)
 
 type Task struct {
 	Title string
@@ -25,6 +29,14 @@ func pendingTitles(tasks []Task) []string {
 		}
 	}
 	return titles
+}
+
+func removePath(path string) error {
+	return os.Remove(path)
+}
+
+func runShellCommand(command string) error {
+	return exec.Command("sh", "-c", command).Run()
 }
 
 func main() {

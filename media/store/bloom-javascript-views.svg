@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="860" viewBox="0 0 1200 860" role="img" aria-labelledby="title desc">
+  <title id="title">JavaScript and Python examples in Bloom</title>
+  <desc id="desc">Two complete, indented code examples show task execution in JavaScript and Python, with operational, interface, structural, and dangerous cues highlighted.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#251936" />
+      <stop offset="1" stop-color="#100b1c" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="860" rx="28" fill="url(#bg)" />
+  <text x="58" y="67" fill="#cbaaff" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="3">TWO EXAMPLES · FOUR READING CUES</text>
+  <text x="58" y="121" fill="#f7f1ff" font-family="Arial,sans-serif" font-size="36" font-weight="700">Read real code with more context.</text>
+  <text x="58" y="155" fill="#a99db6" font-family="Arial,sans-serif" font-size="16">Complete syntax and indentation, shown in JavaScript and Python.</text>
+
+  <g font-family="Arial,sans-serif">
+    <g>
+      <rect x="58" y="194" width="526" height="536" rx="15" fill="#100c17" stroke="#49375e" />
+      <text x="88" y="235" fill="#ffd27b" font-size="13" font-weight="700" letter-spacing="2">JAVASCRIPT · TASK RUNNER</text>
+      <text x="88" y="269" fill="#a99db6" font-size="13">Interface · flow · structure · review cue</text>
+      <rect x="82" y="296" width="478" height="45" rx="7" fill="#ef9beb" opacity=".10" />
+      <rect x="82" y="377" width="478" height="45" rx="7" fill="#8ee5c4" opacity=".10" />
+      <rect x="82" y="485" width="478" height="45" rx="7" fill="#ff91ae" opacity=".10" />
+      <g fill="#cfc4db" font-family="Consolas,monospace" font-size="13" xml:space="preserve">
+        <text x="98" y="326" fill="#ef9beb">import</text><text x="146" y="326"> { execSync } from 'node:child_process';</text>
+        <text x="98" y="353"><tspan fill="#ef9beb">function</tspan> <tspan fill="#ffd27b">runTask</tspan>(command, confirmed) {</text>
+        <text x="98" y="407">  <tspan fill="#8ee5c4">if</tspan> (!confirmed) <tspan fill="#8ee5c4">return</tspan> false;</text>
+        <text x="98" y="434">  <tspan fill="#ef9beb">try</tspan> {</text>
+        <text x="98" y="461">    <tspan fill="#ff91ae">execSync</tspan>(command, { stdio: 'inherit' });</text>
+        <text x="98" y="515">    <tspan fill="#ef9beb">return</tspan> true;</text>
+        <text x="98" y="542">  } <tspan fill="#ef9beb">catch</tspan> (error) {</text>
+        <text x="98" y="569">    console.error(error);</text>
+        <text x="98" y="596">    <tspan fill="#ef9beb">return</tspan> false;</text>
+        <text x="98" y="623">  }</text>
+        <text x="98" y="650">}</text>
+      </g>
+      <text x="88" y="698" fill="#a99db6" font-size="12">The process call is a review cue; check its input and context.</text>
+    </g>
+
+    <g>
+      <rect x="616" y="194" width="526" height="536" rx="15" fill="#100c17" stroke="#49375e" />
+      <text x="646" y="235" fill="#ffd27b" font-size="13" font-weight="700" letter-spacing="2">PYTHON · TASK RUNNER</text>
+      <text x="646" y="269" fill="#a99db6" font-size="13">Interface · flow · structure · review cue</text>
+      <rect x="640" y="296" width="478" height="45" rx="7" fill="#ef9beb" opacity=".10" />
+      <rect x="640" y="377" width="478" height="45" rx="7" fill="#8ee5c4" opacity=".10" />
+      <rect x="640" y="458" width="478" height="45" rx="7" fill="#ff91ae" opacity=".10" />
+      <g fill="#cfc4db" font-family="Consolas,monospace" font-size="13" xml:space="preserve">
+        <text x="656" y="326"><tspan fill="#ef9beb">from</tspan> subprocess <tspan fill="#ef9beb">import</tspan> run</text>
+        <text x="656" y="353"><tspan fill="#ef9beb">def</tspan> <tspan fill="#ffd27b">run_task</tspan>(command: list[str], confirmed: bool) -&gt; bool:</text>
+        <text x="656" y="407">    <tspan fill="#8ee5c4">if not</tspan> confirmed:</text>
+        <text x="656" y="434">        <tspan fill="#8ee5c4">return</tspan> False</text>
+        <text x="656" y="488">    result = <tspan fill="#ff91ae">run</tspan>(command, check=False)</text>
+        <text x="656" y="515">    <tspan fill="#ef9beb">return</tspan> result.returncode == 0</text>
+      </g>
+      <text x="646" y="698" fill="#a99db6" font-size="12">The argument list runs without a shell interpreter.</text>
+    </g>
+  </g>
+
+  <g font-family="Arial,sans-serif" font-size="12" font-weight="700">
+    <circle cx="71" cy="787" r="5" fill="#8ee5c4" /><text x="84" y="791" fill="#b8adbf">OPERATIONAL</text>
+    <circle cx="240" cy="787" r="5" fill="#ffd27b" /><text x="253" y="791" fill="#b8adbf">INTERFACES</text>
+    <circle cx="393" cy="787" r="5" fill="#ef9beb" /><text x="406" y="791" fill="#b8adbf">STRUCTURAL</text>
+    <circle cx="555" cy="787" r="5" fill="#ff91ae" /><text x="568" y="791" fill="#b8adbf">DANGEROUS</text>
+  </g>
+  <text x="58" y="824" fill="#9789a4" font-family="Arial,sans-serif" font-size="12">Bloom highlights are reading cues. Dangerous highlights are not security findings.</text>
+</svg>

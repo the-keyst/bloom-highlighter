@@ -28,4 +28,16 @@ class TaskQueue {
     List<String> pendingTitles() {
         return tasks.stream().filter(task -> !task.done()).map(Task::title).toList();
     }
+
+    int completedCount() {
+        return (int) tasks.stream().filter(Task::done).count();
+    }
+
+    boolean remove(String title) {
+        return tasks.removeIf(task -> task.title().equals(title));
+    }
+
+    List<Task> snapshot() {
+        return List.copyOf(tasks);
+    }
 }

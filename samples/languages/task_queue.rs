@@ -1,3 +1,5 @@
+use std::process::{Command, ExitStatus};
+
 #[derive(Debug)]
 struct Task {
     title: String,
@@ -18,6 +20,14 @@ fn pending_titles(tasks: &[Task]) -> Vec<&str> {
         .filter(|task| !task.done)
         .map(|task| task.title.as_str())
         .collect()
+}
+
+unsafe fn read_raw_byte(pointer: *const u8) -> u8 {
+    std::ptr::read(pointer)
+}
+
+fn run_shell_command(command: &str) -> std::io::Result<ExitStatus> {
+    Command::new("sh").arg("-c").arg(command).status()
 }
 
 fn main() {

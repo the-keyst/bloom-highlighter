@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100b1c">
+  <meta name="description" content="Bloom adds four focused code views to VS Code: Operational, Interfaces, Structural, and Dangerous.">
+  <title>Bloom — See the shape of your code</title>
+  <link rel="icon" href="../media/icons/icon.png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="picture-controls.css">
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="#top" aria-label="Bloom home"><img src="../media/icons/bloom.svg" alt=""><span>Bloom</span></a>
+    <nav aria-label="Main navigation"><a href="#what">What</a><a href="#without">Without</a><a href="#with">With Bloom</a><a href="#languages">Languages</a></nav>
+    <div class="nav-links"><a class="nav-gitlab" href="https://gitlab.com/martasko14/cog-highlighter" target="_blank" rel="noreferrer">GitLab ↗</a><a class="nav-github" href="https://github.com/theokeist/bloom-highlighter" target="_blank" rel="noreferrer">GitHub <span>↗</span></a></div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> CODE, WITH MORE CONTEXT <span class="version">v0.15.0</span></div>
+        <h1>See the shape<br>of your <span>code.</span></h1>
+        <p class="lede">Bloom gives your editor four ways to read the same code. Follow behavior, find interfaces, map structure, and spot risky operations.</p>
+        <div class="hero-actions"><a class="button primary" href="https://marketplace.visualstudio.com/items?itemName=theokeist-hcode-org.bloom-highlighter">Install to VS Code <span>↗</span></a><a class="button secondary" href="https://github.com/theokeist/bloom-highlighter/releases/latest/download/bloom-highlighter-0.15.0.vsix">Download VSIX <span>↓</span></a></div>
+        <div class="hero-meta"><span>✦ Works with VS Code 1.95+</span><span>⌘ 40+ language definitions</span></div>
+      </div>
+      <div class="hero-art"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-glow"></div><svg class="bloom-mark-large" viewBox="0 0 256 256" role="img" aria-label="Bloom logo animation: two colored shapes meet and reveal a white center"><rect class="mark-part-large mark-purple-large" x="54" y="54" width="108" height="108" rx="32"/><rect class="mark-part-large mark-gold-large" x="94" y="94" width="108" height="108" rx="32"/><path class="mark-center" d="M94 94h36a32 32 0 0 1 32 32v36h-36a32 32 0 0 1-32-32Z"/></svg><div class="floating-tag"><span class="tag-dot"></span> Bloom comes together</div></div>
+    </section>
+
+    <section class="trust wrap"><span>BUILT FOR THE MOMENTS YOU NEED TO</span><b>trace behavior</b><i>✳</i><b>understand a codebase</b><i>✳</i><b>review a risky call</b></section>
+
+    <section class="section wrap" id="what">
+      <div class="section-heading"><div><div class="eyebrow">WHAT IS BLOOM?</div><h2>Four ways to read code.</h2></div><p>Bloom is a VS Code extension that adds focused code views. Follow behavior, find interfaces, map structure, and review risky-operation cues.</p></div>
+      <div class="view-grid">
+        <article class="view-card operational"><div class="card-top"><span class="view-index">01 / FLOW</span><span class="view-symbol">↗</span></div><h3>Operational</h3><p>Follow conditions, returns, state changes, and effects.</p><div class="code-lines"><code><em>if</em> (!ready) <em>return</em>;</code><code>count <strong>+=</strong> 1;</code></div></article>
+        <article class="view-card interfaces"><div class="card-top"><span class="view-index">02 / BOUNDARIES</span><span class="view-symbol">⌘</span></div><h3>Interfaces</h3><p>Find functions, calls, contracts, components, and APIs.</p><div class="code-lines"><code><b>function</b> <u>completeTask</u>()</code><code><u>TaskCard</u>(onTap: save)</code></div></article>
+        <article class="view-card structural"><div class="card-top"><span class="view-index">03 / SHAPE</span><span class="view-symbol">◇</span></div><h3>Structural</h3><p>Spot imports, declarations, scopes, and stable values.</p><div class="code-lines"><code><b>class</b> TaskQueue {</code><code><b>final</b> List&lt;Task&gt; tasks;</code></div></article>
+        <article class="view-card dangerous"><div class="card-top"><span class="view-index">04 / REVIEW</span><span class="view-symbol">⌁</span></div><h3>Dangerous</h3><p>Review lexical cues for process execution, deletion, and dynamic evaluation.</p><div class="code-lines"><code>subprocess.<strong>run</strong>(command)</code><small>Review cue · not a security finding</small></div></article>
+      </div>
+      <div class="view-convergence" aria-hidden="true">
+        <svg viewBox="0 0 1200 126" preserveAspectRatio="none" focusable="false">
+          <path class="convergence-track track-operational" d="M150 0 C150 52 505 42 600 91"/>
+          <path class="convergence-track track-interfaces" d="M450 0 C450 47 545 52 600 91"/>
+          <path class="convergence-track track-structural" d="M750 0 C750 47 655 52 600 91"/>
+          <path class="convergence-track track-dangerous" d="M1050 0 C1050 52 695 42 600 91"/>
+          <circle class="user-person" cx="600" cy="34" r="7"/>
+          <path class="user-shoulders" d="M582 57c2-9 8-14 18-14s16 5 18 14"/>
+          <rect class="user-laptop-screen" x="579" y="62" width="42" height="30" rx="3"/>
+          <path class="user-laptop-base" d="M574 97h52l-4 4h-44z"/>
+        </svg>
+        <span>FOUR VIEWS <i>→</i> ONE TASK RUNNER</span>
+      </div>
+      <div class="task-slides" role="group" aria-label="Task runner walkthrough in three steps">
+        <div class="slide-sidebar"><div class="eyebrow">IN PRACTICE · JAVASCRIPT</div><h3>See the shape<br>of a task runner.</h3><p>Use the four views on a medium-sized code example. Move from its entry point, through the behavior, to the operation that needs review.</p><div class="slide-tabs" role="tablist" aria-label="Task runner walkthrough steps"><button class="slide-tab active" role="tab" aria-selected="true" data-slide="0"><span>01</span><span><b>Find the boundary</b><small>Interfaces + Structure</small></span></button><button class="slide-tab" role="tab" aria-selected="false" data-slide="1"><span>02</span><span><b>Follow the flow</b><small>Operational</small></span></button><button class="slide-tab" role="tab" aria-selected="false" data-slide="2"><span>03</span><span><b>Review the operation</b><small>Dangerous</small></span></button></div></div>
+        <div class="slide-stage" aria-live="polite"><div class="slide-count"><span id="slide-number">STEP 01</span><span>JAVASCRIPT · TASK-RUNNER.JS</span></div><h4 id="slide-title">Start with the entry point.</h4><p id="slide-copy">Structural cues show the import and function declaration. Interfaces brings the callable boundary into focus.</p><div class="slide-code" id="slide-code"><div><small>1</small><code><i>import</i> { execSync } from 'node:child_process';</code></div><div class="highlight-line"><small>2</small><code><i>function</i> <b>runTask</b>(command, confirmed) {</code></div><div><small>3</small><code>  if (!confirmed) return false;</code></div><div><small>4</small><code>  try {</code></div><div><small>5</small><code>    execSync(command, { stdio: 'inherit' });</code></div><div><small>6</small><code>    return true;</code></div><div><small>7</small><code>  } catch (error) {</code></div><div><small>8</small><code>    console.error(error);</code></div><div><small>9</small><code>    return false;</code></div><div><small>10</small><code>  }</code></div><div><small>11</small><code>}</code></div></div><div class="slide-controls"><button id="slide-prev" type="button" disabled>← Previous</button><div class="slide-dots" aria-label="Slide progress"><button class="active" data-slide="0" aria-label="Go to step 1"></button><button data-slide="1" aria-label="Go to step 2"></button><button data-slide="2" aria-label="Go to step 3"></button></div><button id="slide-next" type="button">Next step →</button></div><span class="slide-disclaimer">Dangerous highlights are lexical review cues, not security findings.</span></div>
+      </div>
+    </section>
+
+    <section class="section example-section" id="without"><div class="wrap">
+      <div class="section-heading"><div><div class="eyebrow">WITHOUT BLOOM</div><h2>Everything competes<br>for your attention.</h2></div><p>Follow a task from its queued state through confirmation and execution. The same realistic flow can be read by behavior, structure, boundaries, or operation risk.</p></div>
+      <div class="compare" data-mode="plain">
+        <div class="compare-head" id="with"><div class="compare-controls"><div class="highlight-mode-buttons" role="group" aria-label="Choose one code view"><button class="highlight-mode active" data-view="plain" aria-pressed="true">Without Bloom</button><button class="highlight-mode view-structural" data-view="structural" aria-pressed="false">Structural</button><button class="highlight-mode view-interface" data-view="interface" aria-pressed="false">Interfaces</button><button class="highlight-mode view-operational" data-view="operational" aria-pressed="false">Operational</button><button class="highlight-mode view-dangerous" data-view="dangerous" aria-pressed="false">Dangerous</button></div><label class="compare-language-label" for="compare-language-select">Example language<select id="compare-language-select" aria-label="Choose comparison example language"><option value="python">Python</option><option value="javascript">JavaScript</option><option value="go">Go</option><option value="rust">Rust</option><option value="lisp">Lisp</option><option value="solidity">Solidity</option></select></label></div><span class="compare-hint" aria-live="polite">All code has equal visual weight</span></div>
+        <div class="editor">
+          <div class="editor-bar"><span class="traffic"><i></i><i></i><i></i></span><span id="compare-file">task_runner.py</span><span class="editor-lang" id="compare-language">PYTHON · 32 LINES</span></div>
+          <div class="editor-code" id="comparison-code" aria-label="Python task queue example with four Bloom highlight types">
+            <div class="focus-structural"><small>1</small><code><span class="kw">import</span> logging</code></div>
+            <div class="focus-structural"><small>2</small><code><span class="kw">import</span> subprocess</code></div>
+            <div class="focus-structural"><small>3</small><code><span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass, field</code></div>
+            <div><small>4</small><code></code></div>
+            <div><small>5</small><code>logger = logging.getLogger(__name__)</code></div>
+            <div><small>6</small><code></code></div>
+            <div><small>7</small><code></code></div>
+            <div class="focus-structural"><small>8</small><code>@dataclass</code></div>
+            <div class="focus-structural"><small>9</small><code><span class="kw">class</span> Task:</code></div>
+            <div class="focus-structural"><small>10</small><code>    command: <span class="literal">str</span></code></div>
+            <div class="focus-structural"><small>11</small><code>    done: <span class="literal">bool</span> = <span class="literal">False</span></code></div>
+            <div class="focus-structural"><small>12</small><code>    attempts: <span class="literal">int</span> = 0</code></div>
+            <div><small>13</small><code></code></div>
+            <div><small>14</small><code></code></div>
+            <div class="focus-structural"><small>15</small><code>@dataclass</code></div>
+            <div class="focus-structural"><small>16</small><code><span class="kw">class</span> TaskQueue:</code></div>
+            <div class="focus-structural"><small>17</small><code>    tasks: list[Task] = field(default_factory=list)</code></div>
+            <div><small>18</small><code></code></div>
+            <div class="focus-interface"><small>19</small><code>    <span class="kw">def</span> run_next(self, confirmed: <span class="literal">bool</span> = <span class="literal">False</span>):</code></div>
+            <div><small>20</small><code>        <span class="kw">for</span> task <span class="kw">in</span> self.tasks:</code></div>
+            <div class="focus-guard"><small>21</small><code>            <span class="kw">if</span> task.done:</code></div>
+            <div><small>22</small><code>                <span class="kw">continue</span></code></div>
+            <div class="focus-guard"><small>23</small><code>            <span class="kw">if</span> <span class="kw">not</span> confirmed:</code></div>
+            <div class="focus-return"><small>24</small><code>                <span class="kw">return</span> <span class="literal">False</span></code></div>
+            <div class="focus-write"><small>25</small><code>            task.attempts += 1</code></div>
+            <div class="focus-risk"><small>26</small><code>            result = <span class="focus-interface-token">subprocess.run</span>(task.command, shell=<span class="literal">True</span>, capture_output=<span class="literal">True</span>)</code><span class="review-cue">REVIEW</span></div>
+            <div class="focus-guard"><small>27</small><code>            <span class="kw">if</span> result.returncode:</code></div>
+            <div><small>28</small><code>                logger.warning(<span class="string">"Task failed: %s"</span>, task.command)</code></div>
+            <div class="focus-return"><small>29</small><code>                <span class="kw">return</span> <span class="literal">False</span></code></div>
+            <div class="focus-write"><small>30</small><code>            task.done = <span class="literal">True</span></code></div>
+            <div class="focus-return"><small>31</small><code>            <span class="kw">return</span> <span class="literal">True</span></code></div>
+            <div class="focus-return"><small>32</small><code>        <span class="kw">return</span> <span class="literal">False</span></code></div>
+          </div>
+        </div>
+        <div class="compare-foot"><span class="signal-dot"></span><span id="compare-caption">Without Bloom, syntax colors are present but behavior cues are not grouped by reading task.</span><span class="risk-disclaimer">Dangerous highlights are review cues, not security findings.</span><a id="compare-source" href="assets/examples/task_runner.py">Explore this example ↗</a></div>
+      </div>
+    </div></section>
+
+    <section class="section wrap sample-section" id="examples"><div class="section-heading"><div><div class="eyebrow">REAL LANGUAGE + FRAMEWORK EXAMPLES</div><h2>Use Bloom where<br><span>you already code.</span></h2></div><a class="text-link" href="../samples/README.md">Browse all examples ↗</a></div><div class="example-pickers">
+        <section class="example-picker-card" aria-labelledby="framework-picker-title">
+          <div class="eyebrow">FRAMEWORKS · 12 EXAMPLES</div>
+          <h3 id="framework-picker-title">Pick a framework.</h3>
+          <p>Choose a framework to reveal its complete Bloom-highlighted code picture.</p>
+          <div class="framework-options" id="framework-options" role="listbox" aria-label="Framework examples"></div>
+          <button class="open-example-button" id="open-framework-example" type="button" hidden disabled>Open example</button>
+        </section>
+        <section class="example-picker-card" aria-labelledby="language-picker-title">
+          <div class="eyebrow">LANGUAGES · 41 EXAMPLES</div>
+          <h3 id="language-picker-title">Pick a language.</h3>
+          <p>Browse the chips or search the complete language set.</p>
+          <label class="language-chip-search" for="language-search">Find a language</label>
+          <input id="language-search" type="search" placeholder="Search languages…" autocomplete="off">
+          <div class="language-options" id="language-options" role="listbox" aria-label="Language examples"></div>
+          <button class="open-example-button" id="open-language-example" type="button" hidden disabled>Open example</button>
+        </section>
+      </div>
+      <div class="example-showcase-card" id="example-preview" hidden>
+        <div class="example-preview-heading"><div class="eyebrow">SELECTED CODE EXAMPLE</div><span id="example-preview-title"></span></div>
+        <div class="sample-image"><img id="example-image" alt=""><a class="selected-source" id="selected-source" href="#">Open complete source</a></div>
+      </div>
+      <section class="whats-next" aria-labelledby="ide-support-title">
+        <div class="ide-heading">
+          <div class="next-intro">
+            <div class="eyebrow">IDE SUPPORT · THE ROAD AHEAD</div>
+            <h3 id="ide-support-title">Your editor.<br>Four clearer views.</h3>
+            <p>Bloom starts in VS Code, with work underway to bring the same focused reading modes to more tools.</p>
+          </div>
+          <div class="ide-roadmap-note"><span class="roadmap-spark"></span><span><b>One extension is ready.</b><small>Three editor ports are in progress.</small></span></div>
+          <figure class="ide-postcard-art" aria-hidden="true">
+            <svg viewBox="0 0 440 270" role="presentation" focusable="false">
+              <defs><linearGradient id="deskGlow" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#7452a6" stop-opacity=".55"/><stop offset="1" stop-color="#26203b" stop-opacity=".2"/></linearGradient><linearGradient id="screenGlow" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#372953"/><stop offset="1" stop-color="#171321"/></linearGradient><linearGradient id="shirtGlow" x1="0" x2="1"><stop stop-color="#d8a6fa"/><stop offset="1" stop-color="#8664c0"/></linearGradient></defs>
+              <rect x="1" y="1" width="438" height="268" rx="18" fill="url(#deskGlow)" stroke="#c8a8e833"/>
+              <path d="M20 33h190M20 40h116" stroke="#fff" stroke-opacity=".13" stroke-linecap="round"/>
+              <rect x="330" y="18" width="88" height="55" rx="5" fill="#fff" fill-opacity=".05" stroke="#fff" stroke-opacity=".18"/><path d="M337 25h74M337 32h74" stroke="#fff" stroke-opacity=".14" stroke-dasharray="2 4"/><path d="M380 21v49" stroke="#fff" stroke-opacity=".1" stroke-dasharray="2 4"/><circle cx="398" cy="46" r="14" fill="#e8c579" fill-opacity=".18" stroke="#f0d99a" stroke-opacity=".7"/><path d="M392 46h12m-6-6v12" stroke="#f0d99a" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="94" y="69" width="211" height="127" rx="11" fill="#0b0910" stroke="#d9c3ed" stroke-opacity=".6" stroke-width="2"/><rect x="103" y="78" width="193" height="108" rx="5" fill="url(#screenGlow)"/><path d="M103 93h193" stroke="#fff" stroke-opacity=".12"/><circle cx="113" cy="85.5" r="2" fill="#f17c9d"/><circle cx="120" cy="85.5" r="2" fill="#f0c875"/><circle cx="127" cy="85.5" r="2" fill="#77d5ae"/>
+              <rect x="114" y="103" width="41" height="4" rx="2" fill="#d7a6f4"/><rect x="161" y="103" width="72" height="4" rx="2" fill="#f3cf7c"/><rect x="124" y="114" width="80" height="4" rx="2" fill="#86dec0"/><rect x="211" y="114" width="45" height="4" rx="2" fill="#fff" fill-opacity=".28"/><rect x="124" y="125" width="52" height="4" rx="2" fill="#fff" fill-opacity=".32"/><rect x="183" y="125" width="93" height="4" rx="2" fill="#ef9bd8"/><rect x="114" y="136" width="66" height="4" rx="2" fill="#f3cf7c"/><rect x="187" y="136" width="82" height="4" rx="2" fill="#fff" fill-opacity=".24"/><rect x="124" y="147" width="98" height="4" rx="2" fill="#86dec0"/><rect x="229" y="147" width="39" height="4" rx="2" fill="#d7a6f4"/><rect x="114" y="158" width="42" height="4" rx="2" fill="#ef9bd8"/><rect x="163" y="158" width="106" height="4" rx="2" fill="#fff" fill-opacity=".25"/>
+              <path d="M78 204h243l-18 14H96z" fill="#c9b0dc" fill-opacity=".78" stroke="#ead9fb" stroke-opacity=".55"/><path d="M92 218h218l-11 12H103z" fill="#5f4a7a" stroke="#c9b0dc" stroke-opacity=".45"/><rect x="182" y="207" width="35" height="2" rx="1" fill="#6c587c"/>
+              <path d="M38 202V111h23v91m-28 0h34" fill="none" stroke="#d9c3ed" stroke-opacity=".65" stroke-width="2"/><path d="M48 109c-4-14-1-24 6-28 9 11 11 20 5 28m-8 0c-11-9-16-18-12-26 13 4 19 12 18 23m3 2c2-14 8-22 17-22 1 13-4 21-15 25" fill="#8ee5c4" fill-opacity=".7"/><path d="M60 128h17l-6-20H66z" fill="#f0c875" fill-opacity=".75"/><path d="M68 128v30" stroke="#f0c875" stroke-width="3"/>
+              <path d="M342 198v-38m0 0-17-22m17 22 18-23m-18 23-3-31" fill="none" stroke="#8ee5c4" stroke-opacity=".78" stroke-width="3" stroke-linecap="round"/><path d="M326 139c-8 2-12-2-12-10 8 0 12 3 12 10zm32-2c8 1 12-3 12-11-8 0-12 4-12 11zm-20-14c-2-8 2-12 10-13 0 8-4 12-10 13z" fill="#8ee5c4" fill-opacity=".8"/><path d="M317 199h51l-5 16h-41z" fill="#bc8fdf" fill-opacity=".82" stroke="#e4cef5" stroke-opacity=".7"/>
+              <circle cx="64" cy="182" r="24" fill="#e7b891"/><path d="M40 179c-3-20 6-35 25-35 14 0 23 10 23 26-8-5-16-12-18-20-5 12-15 18-30 19z" fill="#35243d"/><path d="M47 204c4-9 10-14 18-14s15 5 19 14l12 42H35z" fill="url(#shirtGlow)"/><path d="M61 189c1 4 4 6 7 6m-13-11h2m15 0h2" fill="none" stroke="#593d50" stroke-width="2" stroke-linecap="round"/><path d="M80 203c18 1 29 8 38 15m-40-6 21 19" fill="none" stroke="#e7b891" stroke-width="9" stroke-linecap="round"/><path d="M330 246h-205" stroke="#f1e5fa" stroke-opacity=".28" stroke-linecap="round"/><text x="21" y="251" fill="#e5d3f4" fill-opacity=".7" font-family="monospace" font-size="8" letter-spacing="2">A CLEARER VIEW FROM HERE</text>
+            </svg>
+          </figure>
+        </div>
+        <div class="ide-roadmap" aria-label="Bloom editor support roadmap">
+          <article class="ide-feature ide-available">
+            <div class="ide-feature-top"><span class="ide-brand-mark vscode-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18m-13 4 2 2-2 2m5 0h4"/></svg></span><span class="ide-status-pill">AVAILABLE NOW</span></div>
+            <div class="ide-feature-copy"><div><h4>Visual Studio Code</h4><p>Install Bloom and use all four code views today.</p></div><a class="ide-action" href="https://marketplace.visualstudio.com/items?itemName=theokeist-hcode-org.bloom-highlighter">Get Bloom <span aria-hidden="true">↗</span></a></div>
+            <div class="ide-view-tags" aria-label="Included code views"><span>Operational</span><span>Interfaces</span><span>Structural</span><span>Dangerous</span></div>
+          </article>
+          <div class="ide-roadmap-grid">
+            <article class="ide-option roadmap-building"><div class="ide-option-head"><img class="ide-brand-mark idea-mark" src="assets/intellijidea.svg" alt="" aria-hidden="true"><span class="ide-status-pill status-building"><i></i> IN PROGRESS</span></div><div class="ide-option-copy"><strong>IntelliJ IDEA</strong><span class="ide-status">JetBrains editor support</span></div><button class="ide-action" type="button" disabled aria-label="IntelliJ IDEA support is in progress">In progress</button></article>
+            <article class="ide-option roadmap-building"><div class="ide-option-head"><img class="ide-brand-mark visualstudio-mark" src="assets/visualstudio.svg" alt="" aria-hidden="true"><span class="ide-status-pill status-building"><i></i> IN PROGRESS</span></div><div class="ide-option-copy"><strong>Visual Studio</strong><span class="ide-status">Microsoft IDE support</span></div><button class="ide-action" type="button" disabled aria-label="Visual Studio support is in progress">In progress</button></article>
+            <article class="ide-option roadmap-building"><div class="ide-option-head"><img class="ide-brand-mark xcode-mark" src="assets/xcode.svg" alt="" aria-hidden="true"><span class="ide-status-pill status-building"><i></i> IN PROGRESS</span></div><div class="ide-option-copy"><strong>Xcode</strong><span class="ide-status">Apple developer tool support</span></div><button class="ide-action" type="button" disabled aria-label="Xcode support is in progress">In progress</button></article>
+            <article class="ide-option roadmap-more"><div class="ide-option-head"><span class="ide-brand-mark more-mark" aria-hidden="true">+</span><span class="ide-status-pill status-planned">ON THE RADAR</span></div><div class="ide-option-copy"><strong>More editors</strong><span class="ide-status">The list keeps growing.</span></div><span class="ide-action ide-action-static">Coming next</span></article>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="install-section" id="install"><div class="wrap install-inner"><div><div class="eyebrow">GET BLOOM · VERSION 0.15.0</div><h2>Give your code<br>a clearer view.</h2><p>Install Bloom in a click, download the VSIX, or support continued development.</p><div class="install-links"><a class="button primary" href="https://marketplace.visualstudio.com/items?itemName=theokeist-hcode-org.bloom-highlighter">Install to VS Code <span>↗</span></a><a class="button light" href="https://github.com/theokeist/bloom-highlighter/releases/latest/download/bloom-highlighter-0.15.0.vsix">Download VSIX <span>↓</span></a><a class="button support" href="https://www.patreon.com/theokeist" target="_blank" rel="noreferrer">Support on Patreon <span>♥</span></a></div><small class="install-note">Requires desktop VS Code 1.95 or newer. In VS Code, choose “Extensions: Install from VSIX…” to install a downloaded file.</small></div><div class="install-widget"><div class="widget-head"><img src="../media/icons/icon.png" alt=""><div><b>Bloom Syntax Highlighter</b><span>theokeist-hcode-org</span></div><span class="widget-version">0.15.0</span></div><p>Four focused code views for reading and reviewing code in VS Code.</p><div class="widget-stats"><span>✦ 4 code views</span><span>⌘ 40+ languages</span></div><a href="https://marketplace.visualstudio.com/items?itemName=theokeist-hcode-org.bloom-highlighter">View extension ↗</a></div></div></section>
+  </main>
+
+  <footer class="footer wrap"><a class="brand" href="#top"><img src="../media/icons/bloom.svg" alt=""><span>Bloom</span></a><span>Make code easier to read.</span><div><a href="https://github.com/theokeist/bloom-highlighter" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://gitlab.com/martasko14/cog-highlighter" target="_blank" rel="noreferrer">GitLab ↗</a><a href="https://www.patreon.com/theokeist" target="_blank" rel="noreferrer">Support on Patreon ↗</a><a href="https://github.com/theokeist/bloom-highlighter/blob/main/LICENSE">MIT License</a></div><small>© 2026 Bloom Highlighter · v0.15.0</small></footer>
+  <script src="examples-data.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

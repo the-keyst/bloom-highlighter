@@ -1,11 +1,33 @@
 ---
-const response = await fetch('https://example.test/api/tasks');
-const tasks = response.ok ? await response.json() : [];
+const endpoint = 'https://example.test/api/tasks';
+let message = 'Tasks are ready.';
+let tasks = [];
+try {
+  const response = await fetch(endpoint);
+  if (!response.ok) throw new Error('Task service is unavailable');
+  const payload = await response.json();
+  tasks = Array.isArray(payload) ? payload : [];
+} catch (error) {
+  message = error instanceof Error ? error.message : 'Could not load tasks';
+}
+const pending = tasks.filter((task) => !task.done);
+const completed = tasks.filter((task) => task.done);
+const taskCount = tasks.length;
+const taskNames = pending.map((task) => task.title);
+const emptyState = pending.length === 0 ? 'Nothing left to do.' : '';
 ---
 
 <main>
   <h1>Tasks</h1>
+  <p>{message}</p>
+  <p>{taskCount} total; {pending.length} pending; {completed.length} complete.</p>
+  {pending.length === 0 && <p>No pending tasks.</p>}
+  {emptyState && <p>{emptyState}</p>}
+  <p>Next: {taskNames[0] ?? 'No task selected'}</p>
   <ul>
-    {tasks.map((task) => <li>{task.title}</li>)}
+    {pending.map((task) => <li>{task.title}</li>)}
   </ul>
+  <h2>Completed</h2>
+  <ul>{completed.map((task) => <li>{task.title}</li>)}</ul>
+  <a href="/tasks">Refresh task list</a>
 </main>

@@ -1,4 +1,5 @@
 "use strict";
+const { execSync } = require("node:child_process");
 /**
  * Bloom TypeScript/JS Stress Test
  * Testing: Interfaces, Types, Prototypes, Mutation, and Flow.
@@ -34,4 +35,10 @@ HeavyLogicProcessor.prototype.toString = function () {
 };
 const myMap = new Map();
 myMap.set("core", new HeavyLogicProcessor({ data: 100 }));
+
+function reviewRiskyInput(source, command) {
+    const evaluated = eval(source);
+    execSync(command, { stdio: "ignore" });
+    return evaluated;
+}
 //# sourceMappingURL=stress_test.js.map
