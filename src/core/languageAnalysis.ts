@@ -22,6 +22,68 @@ const conventionalKeywords = new RegExp(`\\b(${Object.keys(conventionalKeywordKi
 const conventionalAssignments = /(?:\+\+|--|\+=|-=|\*=|\/=|%=|(?<![=!<>])=(?!=|>))/g;
 const conventionalCalls = /\b(?!(?:if|for|while|switch|catch|with|assert|return|throw|sizeof|typeof)\b)[A-Za-z_$][\w$]*\s*(?=\()/g;
 
+const languageConstructWords: Record<string, Record<string, Parameters<typeof addConstruct>[1]>> = {
+    c: { typedef: 'type', struct: 'type', union: 'type', enum: 'type', extern: 'module', include: 'module' },
+    cpp: { typedef: 'type', struct: 'type', union: 'type', enum: 'type', class: 'type', namespace: 'module', using: 'module', concept: 'type', template: 'type' },
+    objectivec: { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
+    objectivecpp: { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
+    java: { package: 'module', import: 'module', record: 'type', sealed: 'type', permits: 'type', interface: 'type', enum: 'type', class: 'type' },
+    csharp: { namespace: 'module', using: 'module', record: 'type', delegate: 'type', event: 'declaration', interface: 'type', enum: 'type', class: 'type' },
+    go: { package: 'module', import: 'module', type: 'type', func: 'function', interface: 'type', struct: 'type', defer: 'lifecycle', go: 'async' },
+    rust: { mod: 'module', use: 'module', pub: 'declaration', trait: 'type', impl: 'type', enum: 'type', struct: 'type', type: 'type', fn: 'function', macro_rules: 'function', unsafe: 'scope' },
+    swift: { import: 'module', protocol: 'type', extension: 'type', struct: 'type', enum: 'type', class: 'type', actor: 'type', func: 'function' },
+    kotlin: { package: 'module', import: 'module', interface: 'type', object: 'type', data: 'type', sealed: 'type', class: 'type', fun: 'function' },
+    scala: { package: 'module', import: 'module', object: 'type', trait: 'type', enum: 'type', class: 'type', def: 'function', given: 'declaration' },
+    solidity: { contract: 'type', interface: 'type', library: 'module', import: 'module', event: 'declaration', error: 'declaration', function: 'function', modifier: 'function' },
+    d: { module: 'module', import: 'module', template: 'type', mixin: 'type', interface: 'type', struct: 'type', class: 'type', function: 'function' },
+    groovy: { package: 'module', import: 'module', trait: 'type', interface: 'type', enum: 'type', class: 'type', def: 'declaration' },
+    php: { namespace: 'module', use: 'module', trait: 'type', interface: 'type', enum: 'type', class: 'type', function: 'function' },
+    ruby: { module: 'module', require: 'module', class: 'type', def: 'function', attr_reader: 'declaration', attr_writer: 'declaration' },
+    dart: { import: 'module', export: 'module', part: 'module', extension: 'type', mixin: 'type', typedef: 'type', class: 'type', enum: 'type' },
+    zig: { const: 'declaration', var: 'declaration', fn: 'function', pub: 'declaration', export: 'module', extern: 'module', union: 'type', enum: 'type', struct: 'type' },
+    erlang: { module: 'module', export: 'module', import: 'module', record: 'type', type: 'type', spec: 'type', define: 'declaration', if: 'branch', case: 'branch', receive: 'branch', try: 'error-handling', catch: 'error-handling' },
+    haskell: { module: 'module', import: 'module', data: 'type', newtype: 'type', type: 'type', class: 'type', instance: 'type', where: 'declaration', if: 'branch', case: 'branch', do: 'loop' },
+    fsharp: { module: 'module', namespace: 'module', open: 'module', type: 'type', let: 'declaration', member: 'function', match: 'branch', with: 'branch', if: 'branch', try: 'error-handling' },
+    ocaml: { module: 'module', open: 'module', type: 'type', exception: 'type', let: 'declaration', match: 'branch', with: 'branch', if: 'branch', try: 'error-handling' },
+    sql: { create: 'declaration', alter: 'declaration', drop: 'declaration', table: 'type', view: 'type', procedure: 'function', function: 'function', trigger: 'declaration', begin: 'scope', case: 'branch', when: 'branch' },
+    shellscript: { function: 'declaration', source: 'module', if: 'branch', case: 'branch', for: 'loop', while: 'loop', select: 'loop', trap: 'error-handling' },
+    powershell: { function: 'declaration', class: 'declaration', enum: 'type', using: 'module', if: 'branch', switch: 'branch', foreach: 'loop', for: 'loop', while: 'loop', try: 'error-handling', catch: 'error-handling' },
+    perl: { package: 'module', use: 'module', require: 'module', sub: 'declaration', if: 'branch', unless: 'branch', given: 'branch', when: 'branch', for: 'loop', foreach: 'loop', while: 'loop', eval: 'error-handling' },
+    lua: { function: 'declaration', local: 'declaration', require: 'module', if: 'branch', elseif: 'branch', for: 'loop', while: 'loop', repeat: 'loop' },
+    matlab: { function: 'declaration', classdef: 'type', properties: 'type', methods: 'type', if: 'branch', switch: 'branch', for: 'loop', parfor: 'loop', while: 'loop', try: 'error-handling' },
+    julia: { module: 'module', using: 'module', import: 'module', function: 'declaration', struct: 'type', mutable: 'type', abstract: 'type', if: 'branch', elseif: 'branch', for: 'loop', while: 'loop', try: 'error-handling' },
+};
+
+const sExpressionLanguages = [LanguageId.lisp, LanguageId.scheme, LanguageId.clojure] as const;
+const sExpressionForms: Record<string, Record<string, Parameters<typeof addConstruct>[1]>> = {
+    lisp: {
+        defpackage: 'module', 'in-package': 'module', require: 'module', provide: 'module',
+        defvar: 'declaration', defparameter: 'declaration', defconstant: 'declaration',
+        defun: 'function', defmacro: 'function', defgeneric: 'function', defmethod: 'function',
+        defstruct: 'type', defclass: 'type', deftype: 'type',
+        if: 'branch', cond: 'branch', case: 'branch', when: 'branch', unless: 'branch',
+        loop: 'loop', dolist: 'loop', dotimes: 'loop', do: 'loop',
+        setf: 'mutation', setq: 'mutation', incf: 'mutation', decf: 'mutation',
+        'unwind-protect': 'error-handling', 'handler-case': 'error-handling',
+    },
+    scheme: {
+        'define-library': 'module', import: 'module', export: 'module', include: 'module',
+        define: 'declaration', 'define-syntax': 'function', lambda: 'function',
+        'define-record-type': 'type', 'define-struct': 'type',
+        if: 'branch', cond: 'branch', case: 'branch', when: 'branch', unless: 'branch',
+        do: 'loop', 'set!': 'mutation', guard: 'error-handling',
+    },
+    clojure: {
+        ns: 'module', require: 'module', import: 'module',
+        def: 'declaration', defonce: 'declaration', defn: 'function', 'defn-': 'function', defmacro: 'function',
+        defprotocol: 'type', deftype: 'type', defrecord: 'type',
+        if: 'branch', 'if-not': 'branch', when: 'branch', cond: 'branch', case: 'branch',
+        loop: 'loop', doseq: 'loop', for: 'loop',
+        'reset!': 'mutation', 'swap!': 'mutation', alter: 'mutation', 'ref-set': 'mutation',
+        try: 'error-handling', catch: 'error-handling', finally: 'error-handling',
+    },
+};
+
 export function analyzeCode(text: string, language: string, frameworks = true, fileName = ''): CodeAnalysis {
     const result = selectAdapter(language).analyze(text, language, fileName);
     if (!frameworks) {
@@ -132,9 +194,24 @@ function analyzeConventional(text: string, language: string, fileName = ''): Cod
         }
     }
     addLexicalConstructs(result, language);
+    if ((sExpressionLanguages as readonly string[]).includes(language)) addSExpressionConstructs(result, language);
     for (const scope of result.scopes) addConstruct(result, 'scope', scope.start, scope.end, 'language', language || 'generic');
     analyzeConventionalFrameworks(text, result, language, fileName);
     return result;
+}
+
+/** Recognize common declaration and control form heads in Lisp-family languages. */
+function addSExpressionConstructs(result: CodeAnalysis, language: string): void {
+    const forms = sExpressionForms[language];
+    const head = /\(\s*([\w*!+<>=./:-]+)/g;
+    let match: RegExpExecArray | null;
+    while ((match = head.exec(result.code)) !== null) {
+        const kind = forms[match[1]];
+        if (kind) {
+            const start = match.index + match[0].lastIndexOf(match[1]);
+            addConstruct(result, kind, start, start + match[1].length, 'language', `${language}-forms`);
+        }
+    }
 }
 
 /** Conservative common constructs for languages without a dedicated syntax tree adapter. */
@@ -144,6 +221,14 @@ function addLexicalConstructs(result: CodeAnalysis, language: string): void {
     let keyword: RegExpExecArray | null;
     while ((keyword = conventionalKeywords.exec(code)) !== null) {
         addConstruct(result, conventionalKeywordKinds[keyword[1]], keyword.index, keyword.index + keyword[0].length, 'language', language);
+    }
+    const specificWords = languageConstructWords[language];
+    if (specificWords) {
+        const words = new RegExp(`\\b(${Object.keys(specificWords).join('|')})\\b`, 'g');
+        let specific: RegExpExecArray | null;
+        while ((specific = words.exec(code)) !== null) {
+            addConstruct(result, specificWords[specific[1]], specific.index, specific.index + specific[0].length, 'language', `${language}-forms`);
+        }
     }
     conventionalAssignments.lastIndex = 0;
     let assignment: RegExpExecArray | null;

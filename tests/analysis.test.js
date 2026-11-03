@@ -205,3 +205,19 @@ test('Python indentation and Ruby keyword scopes ignore strings/comments', () =>
     const cpp = 'const auto text = R"tag({ if })tag"; // {\nint n = 0;';
     assert.equal(analyzeCode(cpp, 'cpp').scopes.length, 0);
 });
+
+test('Lisp-family form heads emit shared constructs and ignore comments and strings', () => {
+    const cases = [
+        ['lisp', '(defpackage :app)\n(defstruct task)\n(defun run () (when ready (setf done t)))\n; (defun ignored () nil)\n(format t "(defclass fake)")', ['module', 'type', 'function', 'branch', 'mutation']],
+        ['scheme', '(define-library (app) (export run))\n(define (run x) (if x (set! x #t)))\n; (define fake 0)', ['module', 'declaration', 'branch', 'mutation']],
+        ['clojure', '(ns app)\n(defn run [] (when ready (swap! state inc)))\n;; (defn fake [])', ['module', 'function', 'branch', 'mutation']],
+    ];
+    for (const [language, text, expected] of cases) {
+        const result = analyzeCode(text, language);
+        const actual = result.constructs.map(c => c.kind);
+        for (const kind of expected) assert.ok(actual.includes(kind), `${language} missing ${kind}`);
+        assert.equal(actual.filter(kind => kind === 'function').length + actual.filter(kind => kind === 'declaration').length > 1, true);
+        assert.equal(text.slice(result.constructs.find(c => c.kind === 'function' && c.adapter === `${language}-forms`)?.start ?? 0,
+            result.constructs.find(c => c.kind === 'function' && c.adapter === `${language}-forms`)?.end ?? 0), language === 'lisp' ? 'defun' : language === 'scheme' ? 'define' : 'defn');
+    }
+});
