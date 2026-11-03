@@ -17,6 +17,7 @@
   "activationEvents": [
     "onStartupFinished",
     "onView:bloom.controls",
+    "onView:bloom.tree",
     "onLanguage:dart",
     "onLanguage:typescript",
     "onLanguage:javascript",
@@ -47,8 +48,13 @@
         {
           "id": "bloom.controls",
           "name": "Code Views",
-          "type": "webview"
-        }
+            "type": "webview"
+          },
+          {
+            "id": "bloom.tree",
+            "name": "Quick Navigation",
+            "type": "tree"
+          }
       ]
     },
     "commands": [
@@ -344,12 +350,13 @@
     "test:large": "npm run compile && node --test tests/largeRendering.test.js",
     "test": "node --test tests/*.test.js",
     "generate-rules": "node scripts/generate-language-rules.js",
+    "generate-website-artwork": "npm run compile && node website/generate-artwork.js",
     "package": "vsce package",
     "package:build": "node scripts/package-build.js",
     "configure-release": "node scripts/release-links.js",
     "check-release": "node scripts/release-links.js --check",
     "publish:marketplace": "npm run check-release && vsce publish",
-    "render-doc-images": "npm run compile && node scripts/render-doc-images.js && node scripts/render-example-images.js"
+    "render-doc-images": "npm run compile && node scripts/render-doc-images.js && node website/generate-artwork.js && node scripts/render-example-images.js"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

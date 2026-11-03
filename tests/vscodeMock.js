@@ -29,6 +29,7 @@ function installMock() {
         },
         ThemeIcon: class { constructor(id, color) { this.id = id; this.color = color; } },
         ThemeColor: class { constructor(id) { this.id = id; } },
+        TreeItem: class { constructor(label, collapsibleState) { this.label = label; this.collapsibleState = collapsibleState; } },
         Position, Range,
         DecorationRangeBehavior: { ClosedClosed: 1 },
         ExtensionMode: { Development: 2, Production: 1 },
@@ -41,6 +42,8 @@ function installMock() {
         },
         window: {
             registerTreeDataProvider(id, provider) { providers.set(id, provider); return { dispose() { providers.delete(id); } }; },
+            registerWebviewViewProvider(id, provider) { providers.set(id, provider); return { dispose() { providers.delete(id); } }; },
+            registerWebviewViewProvider(id, provider) { providers.set(id, provider); return { dispose() { providers.delete(id); } }; },
             visibleTextEditors: [],
             activeTextEditor: undefined,
             createTextEditorDecorationType(options) {

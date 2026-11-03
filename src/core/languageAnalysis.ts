@@ -23,29 +23,30 @@ const conventionalAssignments = /(?:\+\+|--|\+=|-=|\*=|\/=|%=|(?<![=!<>])=(?!=|>
 const conventionalCalls = /\b(?!(?:if|for|while|switch|catch|with|assert|return|throw|sizeof|typeof)\b)[A-Za-z_$][\w$]*\s*(?=\()/g;
 
 const languageConstructWords: Record<string, Record<string, Parameters<typeof addConstruct>[1]>> = {
+    python: { class: 'declaration', from: 'module', import: 'module' },
     c: { typedef: 'type', struct: 'type', union: 'type', enum: 'type', extern: 'module', include: 'module' },
-    cpp: { typedef: 'type', struct: 'type', union: 'type', enum: 'type', class: 'type', namespace: 'module', using: 'module', concept: 'type', template: 'type' },
+    cpp: { typedef: 'type', struct: 'type', union: 'type', enum: 'type', class: 'declaration', namespace: 'module', using: 'module', concept: 'type', template: 'type' },
     objectivec: { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
     objectivecpp: { interface: 'type', implementation: 'type', protocol: 'type', property: 'declaration', import: 'module' },
-    java: { package: 'module', import: 'module', record: 'type', sealed: 'type', permits: 'type', interface: 'type', enum: 'type', class: 'type' },
-    csharp: { namespace: 'module', using: 'module', record: 'type', delegate: 'type', event: 'declaration', interface: 'type', enum: 'type', class: 'type' },
+    java: { package: 'module', import: 'module', record: 'type', sealed: 'type', permits: 'type', interface: 'type', enum: 'type', class: 'declaration' },
+    csharp: { namespace: 'module', using: 'module', record: 'type', delegate: 'type', event: 'declaration', interface: 'type', enum: 'type', class: 'declaration' },
     go: { package: 'module', import: 'module', type: 'type', func: 'function', interface: 'type', struct: 'type', defer: 'lifecycle', go: 'async' },
-    rust: { mod: 'module', use: 'module', pub: 'declaration', trait: 'type', impl: 'type', enum: 'type', struct: 'type', type: 'type', fn: 'function', macro_rules: 'function', unsafe: 'scope' },
-    swift: { import: 'module', protocol: 'type', extension: 'type', struct: 'type', enum: 'type', class: 'type', actor: 'type', func: 'function' },
-    kotlin: { package: 'module', import: 'module', interface: 'type', object: 'type', data: 'type', sealed: 'type', class: 'type', fun: 'function' },
-    scala: { package: 'module', import: 'module', object: 'type', trait: 'type', enum: 'type', class: 'type', def: 'function', given: 'declaration' },
+    rust: { mod: 'module', use: 'module', pub: 'declaration', trait: 'type', impl: 'type', enum: 'type', struct: 'type', type: 'type', fn: 'function', macro_rules: 'function' },
+    swift: { import: 'module', protocol: 'type', extension: 'type', struct: 'type', enum: 'type', class: 'declaration', actor: 'type', func: 'function' },
+    kotlin: { package: 'module', import: 'module', interface: 'type', object: 'type', data: 'type', sealed: 'type', class: 'declaration', fun: 'function' },
+    scala: { package: 'module', import: 'module', object: 'type', trait: 'type', enum: 'type', class: 'declaration', def: 'function', given: 'declaration' },
     solidity: { contract: 'type', interface: 'type', library: 'module', import: 'module', event: 'declaration', error: 'declaration', function: 'function', modifier: 'function' },
     d: { module: 'module', import: 'module', template: 'type', mixin: 'type', interface: 'type', struct: 'type', class: 'type', function: 'function' },
-    groovy: { package: 'module', import: 'module', trait: 'type', interface: 'type', enum: 'type', class: 'type', def: 'declaration' },
+    groovy: { package: 'module', import: 'module', trait: 'type', interface: 'type', enum: 'type', class: 'declaration', def: 'declaration' },
     php: { namespace: 'module', use: 'module', trait: 'type', interface: 'type', enum: 'type', class: 'type', function: 'function' },
     ruby: { module: 'module', require: 'module', class: 'type', def: 'function', attr_reader: 'declaration', attr_writer: 'declaration' },
-    dart: { import: 'module', export: 'module', part: 'module', extension: 'type', mixin: 'type', typedef: 'type', class: 'type', enum: 'type' },
+    dart: { import: 'module', export: 'module', part: 'module', extension: 'type', mixin: 'type', typedef: 'type', class: 'declaration', enum: 'type' },
     zig: { const: 'declaration', var: 'declaration', fn: 'function', pub: 'declaration', export: 'module', extern: 'module', union: 'type', enum: 'type', struct: 'type' },
     erlang: { module: 'module', export: 'module', import: 'module', record: 'type', type: 'type', spec: 'type', define: 'declaration', if: 'branch', case: 'branch', receive: 'branch', try: 'error-handling', catch: 'error-handling' },
     haskell: { module: 'module', import: 'module', data: 'type', newtype: 'type', type: 'type', class: 'type', instance: 'type', where: 'declaration', if: 'branch', case: 'branch', do: 'loop' },
     fsharp: { module: 'module', namespace: 'module', open: 'module', type: 'type', let: 'declaration', member: 'function', match: 'branch', with: 'branch', if: 'branch', try: 'error-handling' },
     ocaml: { module: 'module', open: 'module', type: 'type', exception: 'type', let: 'declaration', match: 'branch', with: 'branch', if: 'branch', try: 'error-handling' },
-    sql: { create: 'declaration', alter: 'declaration', drop: 'declaration', table: 'type', view: 'type', procedure: 'function', function: 'function', trigger: 'declaration', begin: 'scope', case: 'branch', when: 'branch' },
+    sql: { create: 'declaration', alter: 'declaration', drop: 'declaration', table: 'type', view: 'type', procedure: 'function', function: 'function', trigger: 'declaration', case: 'branch', when: 'branch' },
     shellscript: { function: 'declaration', source: 'module', if: 'branch', case: 'branch', for: 'loop', while: 'loop', select: 'loop', trap: 'error-handling' },
     powershell: { function: 'declaration', class: 'declaration', enum: 'type', using: 'module', if: 'branch', switch: 'branch', foreach: 'loop', for: 'loop', while: 'loop', try: 'error-handling', catch: 'error-handling' },
     perl: { package: 'module', use: 'module', require: 'module', sub: 'declaration', if: 'branch', unless: 'branch', given: 'branch', when: 'branch', for: 'loop', foreach: 'loop', while: 'loop', eval: 'error-handling' },
@@ -57,10 +58,10 @@ const languageConstructWords: Record<string, Record<string, Parameters<typeof ad
     'cuda-cpp': { __global__: 'function', __device__: 'function', __host__: 'function', __shared__: 'declaration', struct: 'type', class: 'type', namespace: 'module' },
     glsl: { struct: 'type', uniform: 'declaration', buffer: 'declaration', layout: 'declaration', in: 'declaration', out: 'declaration', if: 'branch', for: 'loop', while: 'loop' },
     hlsl: { struct: 'type', cbuffer: 'declaration', tbuffer: 'declaration', interface: 'type', if: 'branch', for: 'loop', while: 'loop' },
-    coffeescript: { class: 'type', extends: 'type', if: 'branch', unless: 'branch', switch: 'branch', when: 'branch', for: 'loop', while: 'loop', until: 'loop' },
+    coffeescript: { class: 'declaration', extends: 'type', if: 'branch', unless: 'branch', switch: 'branch', when: 'branch', for: 'loop', while: 'loop', until: 'loop' },
     elixir: { defmodule: 'module', defprotocol: 'type', defimpl: 'type', defstruct: 'type', defrecord: 'type', def: 'function', defp: 'function', defmacro: 'function', defguard: 'function', if: 'branch', unless: 'branch', case: 'branch', cond: 'branch', with: 'branch', for: 'loop', try: 'error-handling', rescue: 'error-handling', catch: 'error-handling' },
     r: { library: 'module', require: 'module', source: 'module', function: 'function', if: 'branch', else: 'branch', for: 'loop', while: 'loop', repeat: 'loop', tryCatch: 'error-handling' },
-    razor: { namespace: 'module', using: 'module', class: 'type', interface: 'type', record: 'type', if: 'branch', foreach: 'loop', for: 'loop' },
+    razor: { namespace: 'module', using: 'module', class: 'declaration', interface: 'type', record: 'type', if: 'branch', foreach: 'loop', for: 'loop' },
     astro: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
     vue: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
     svelte: { import: 'module', export: 'module', interface: 'type', type: 'type', function: 'function', if: 'branch', for: 'loop' },
@@ -232,19 +233,24 @@ function addLexicalConstructs(result: CodeAnalysis, language: string): void {
     conventionalKeywords.lastIndex = 0;
     let keyword: RegExpExecArray | null;
     while ((keyword = conventionalKeywords.exec(code)) !== null) {
-        addConstruct(result, conventionalKeywordKinds[keyword[1]], keyword.index, keyword.index + keyword[0].length, 'language', language);
+        if (!languageConstructWords[language]?.[keyword[1]] && !(language === LanguageId.python && keyword[1] === 'def')) {
+            addConstruct(result, conventionalKeywordKinds[keyword[1]], keyword.index, keyword.index + keyword[0].length, 'language', language);
+        }
     }
     const specificWords = languageConstructWords[language];
     if (specificWords) {
-        const words = new RegExp(`\\b(${Object.keys(specificWords).join('|')})\\b`, 'g');
+        const words = new RegExp(`\\b(${Object.keys(specificWords).join('|')})\\b`, language === LanguageId.sql ? 'gi' : 'g');
         let specific: RegExpExecArray | null;
         while ((specific = words.exec(code)) !== null) {
-            addConstruct(result, specificWords[specific[1]], specific.index, specific.index + specific[0].length, 'language', `${language}-forms`);
+            const kind = specificWords[specific[1]] ?? specificWords[specific[1].toLowerCase()];
+            if (kind) addConstruct(result, kind, specific.index, specific.index + specific[0].length, 'language', `${language}-forms`);
         }
     }
-    conventionalAssignments.lastIndex = 0;
-    let assignment: RegExpExecArray | null;
-    while ((assignment = conventionalAssignments.exec(code)) !== null) addConstruct(result, 'mutation', assignment.index, assignment.index + assignment[0].length, 'generic', language || 'generic');
+    if (language !== LanguageId.dart) {
+        conventionalAssignments.lastIndex = 0;
+        let assignment: RegExpExecArray | null;
+        while ((assignment = conventionalAssignments.exec(code)) !== null) addConstruct(result, 'mutation', assignment.index, assignment.index + assignment[0].length, 'generic', language || 'generic');
+    }
     conventionalCalls.lastIndex = 0;
     let call: RegExpExecArray | null;
     while ((call = conventionalCalls.exec(code)) !== null) {

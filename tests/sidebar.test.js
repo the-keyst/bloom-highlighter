@@ -8,7 +8,7 @@ const schemas = require('../out/core/definitions.json');
 const { registerSidebar } = require('../out/sidebar');
 
 function section(id) {
-    const provider = mock.providers.get('bloom.controls');
+    const provider = mock.providers.get('bloom.tree');
     const root = provider.getChildren();
     const heading = root.find(row => row.id === 'bloom.highlighting');
     assert.ok(heading, 'Section must be inside the existing Code Views panel');
@@ -107,7 +107,7 @@ test('adjustments change real settings, restore delay, respect folder scope and 
     assert.equal(mock.settingWrites.at(-1).target, mock.vscode.ConfigurationTarget.Global);
     await mock.commands.get('bloom.viewOperational')();
     assert.equal(section('bloom.legend').getChildren().find(row => row.label === 'Active view').description, 'Operational');
-    assert.deepEqual(require('../package.json').contributes.views.bloom.map(view => view.id), ['bloom.controls']);
+    assert.deepEqual(require('../package.json').contributes.views.bloom.map(view => view.id), ['bloom.controls', 'bloom.tree']);
     assert.ok(mock.commands.has('bloom.showSidebar'));
 });
 
@@ -116,7 +116,7 @@ test('all highlighting controls share one expanded section with category actions
     mock.editor(mock.document('return;', 'dart'));
     const sidebar = registerSidebar(() => ({ mode: 'operational', categories: ['alert', 'logic', 'guards', 'mutation'] }));
     t.after(() => sidebar.dispose());
-    const provider = mock.providers.get('bloom.controls');
+    const provider = mock.providers.get('bloom.tree');
     const root = provider.getChildren();
     assert.deepEqual(root.map(row => row.label), ['Code Highlighting']);
     const rows = provider.getChildren(root[0]);

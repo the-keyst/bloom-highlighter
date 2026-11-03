@@ -50,6 +50,7 @@ const sidebarCommands = new Set([
 export function registerSidebar(getState: () => SidebarState): vscode.Disposable & { refresh(): void } {
     let currentView: vscode.WebviewView | undefined;
     const disposables: vscode.Disposable[] = [];
+    const treeChanged = new vscode.EventEmitter<vscode.TreeItem | undefined | null | void>();
 
     const configuration = () => vscode.workspace.getConfiguration('bloom', vscode.window.activeTextEditor?.document.uri);
     const readState = (): SidebarViewState => {
@@ -71,7 +72,7 @@ export function registerSidebar(getState: () => SidebarState): vscode.Disposable
         return {
             mode: getState().mode,
             language: document?.languageId ?? '',
-            languageDescription: !document ? 'Open a code file to begin' : !schema ? 'No Bloom patterns for this language' :
+            languageDescription: !document ? 'Open a code file to begin' : !schema ? 'No Bloom highlighting' :
                 schema.id === 'generic' ? 'Baseline patterns' : 'Dedicated patterns',
             supported,
             enabled: !!document && highlightingEnabled(document),
@@ -87,7 +88,59 @@ export function registerSidebar(getState: () => SidebarState): vscode.Disposable
 
     const refresh = () => {
         if (currentView) void currentView.webview.postMessage({ type: 'state', state: readState() });
+        treeChanged.fire();
     };
+
+    const makeTreeItem = (id: string, label: string, description?: string, collapsibleState = vscode.TreeItemCollapsibleState.None,
+        command?: vscode.Command, tooltip?: string, contextValue?: string): vscode.TreeItem =>
+        Object.assign(new vscode.TreeItem(label, collapsibleState), { id, description, command, tooltip, contextValue,
+            iconPath: contextValue ? new vscode.ThemeIcon(contextValue === 'functions' ? 'symbol-method' : 'symbol-' + contextValue) : undefined });
+    const categoryExamples: Partial<Record<OperationalKey, string>> = {
+        anchor: 'const, final, None', native: 'list, int, String', structural: 'class, module, mixin',
+        interface: 'def, interface, protocol', functions: 'run(), render()', mutation: 'set!, +=, setf',
+        guards: 'if, try, return', danger: 'eval, delete-file, system'
+    };
+    const treeProvider: vscode.TreeDataProvider<vscode.TreeItem> = {
+        onDidChangeTreeData: treeChanged.event,
+        getTreeItem: item => item,
+        getChildren: element => {
+            const state = readState();
+            if (!element) return [makeTreeItem('bloom.highlighting', 'Code Highlighting', undefined, vscode.TreeItemCollapsibleState.Expanded)];
+            if (element.id === 'bloom.highlighting') return [
+                ...viewButtons.map(view => makeTreeItem(`view.${view.id}`, view.label, view.description, vscode.TreeItemCollapsibleState.None,
+                    { command: view.command, title: view.label }, undefined, 'view')),
+                makeTreeItem('language', state.language || 'Open a code file', state.languageDescription),
+                makeTreeItem('active-view', 'Active view', ({ operational: 'Operational', interfaces: 'Interfaces', structural: 'Structural', dangerous: 'Dangerous' } as Record<string, string>)[state.mode] ?? state.mode),
+                makeTreeItem('highlighting', 'Highlighting', state.paused ? 'Paused for large file' : state.enabled ? 'On' : 'Off'),
+                ...state.categories.map(category => makeTreeItem(`category.${category.key}`, category.label,
+                    category.active ? 'Active' : category.enabled ? 'On' : 'Off', vscode.TreeItemCollapsibleState.Collapsed,
+                    undefined, `${category.examples === 'Custom pattern' ? categoryExamples[category.key] ?? category.examples : category.examples} · ${category.color}`, category.key)),
+                makeTreeItem('action.bloom.toggle', 'Toggle highlighting', state.enabled ? 'On' : 'Off', vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.toggle', title: 'Toggle highlighting' }),
+                makeTreeItem('action.bloom.toggleLanguage', 'This language', state.languageEnabled ? 'On' : 'Off', vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.toggleLanguage', title: 'This language' }),
+                makeTreeItem('action.bloom.adjustDimming', 'Dimming', `${Math.round(state.dimOpacity * 100)}% opacity`, vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.adjustDimming', title: 'Dimming' }),
+                makeTreeItem('action.bloom.toggleInstant', 'Instant switching', state.speed === 0 ? 'On' : `Off · ${state.speed} ms`, vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.toggleInstant', title: 'Instant switching' }),
+                makeTreeItem('action.bloom.toggleDangerFocus', 'Strong danger focus', state.dangerousEmphasis ? 'On' : 'Off', vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.toggleDangerFocus', title: 'Strong danger focus' }),
+                makeTreeItem('action.bloom.toggleFrameworks', 'Framework cues', state.frameworks ? 'On' : 'Off', vscode.TreeItemCollapsibleState.None,
+                    { command: 'bloom.toggleFrameworks', title: 'Framework cues' }),
+            ];
+            if (element.id?.startsWith('category.')) {
+                const key = element.id.slice('category.'.length);
+                return [
+                    makeTreeItem(`${element.id}.toggle`, `Toggle ${element.label}`, undefined, vscode.TreeItemCollapsibleState.None,
+                        { command: 'bloom.toggleCategory', title: 'Toggle category', arguments: [state.language, key] }),
+                    makeTreeItem(`${element.id}.color`, 'Choose color', undefined, vscode.TreeItemCollapsibleState.None,
+                        { command: 'bloom.chooseColor', title: 'Choose color', arguments: [state.language, key] }),
+                ];
+            }
+            return [];
+        },
+    };
+    const treeRegistration = vscode.window.registerTreeDataProvider('bloom.tree', treeProvider);
 
     const html = (webview: vscode.Webview): string => {
         const nonce = [...Array(32)].map(() => Math.random().toString(36).slice(2)).join('').slice(0, 32);
@@ -279,6 +332,8 @@ export function registerSidebar(getState: () => SidebarState): vscode.Disposable
         dispose: () => {
             currentView = undefined;
             registration.dispose();
+            treeRegistration.dispose();
+            treeChanged.dispose();
             for (const disposable of disposables.splice(0)) disposable.dispose();
         }
     };

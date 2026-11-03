@@ -156,10 +156,6 @@ export function analyzeScript(text: string, jsx = false, macros?: 'vue' | 'svelt
         }
     }
     function visit(node: ts.Node): void {
-        if (ts.isVariableDeclaration(node) || ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node) ||
-            ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node) || ts.isEnumDeclaration(node)) {
-            if (node.name && ts.isIdentifier(node.name)) addNodeConstruct(node, 'declaration', node.name);
-        }
         if (ts.isFunctionLike(node)) {
             const declaration = node as ts.NamedDeclaration;
             const named = declaration.name && ts.isIdentifier(declaration.name) ? declaration.name : undefined;
@@ -189,7 +185,6 @@ export function analyzeScript(text: string, jsx = false, macros?: 'vue' | 'svelt
                 addConstruct(result, 'mutation', start, start + length, 'language', 'javascript-typescript');
             }
         }
-        if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) addNodeConstruct(node, 'type', node.name);
         if (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) {
             const keyword = text.slice(node.getStart(file)).match(/^(?:import|export)\b/)?.[0];
             if (keyword) addKeywordConstruct(node, 'module', keyword);

@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { analyzeCode } = require('../out/core/languageAnalysis');
+const { ConventionalLanguageIds } = require('../out/core/languageIds');
 const { parseMarkdown } = require('../out/core/schemaParser');
 const { UniversalLoader } = require('../out/core/loader');
 const schemas = require('../out/core/definitions.json');
@@ -224,7 +225,7 @@ test('Lisp-family form heads emit shared constructs and ignore comments and stri
 test('remaining language families expose their own module, type, and control constructs', () => {
     const cases = [
         ['elixir', 'defmodule Queue do\n defstruct tasks: []\n def run(items), do: if(items, do: items)\nend', ['module', 'type', 'function', 'branch']],
-        ['coffeescript', 'class Queue\n  run: ->\n    if ready then for item in items\n      item', ['type', 'branch', 'loop']],
+        ['coffeescript', 'class Queue\n  run: ->\n    if ready then for item in items\n      item', ['declaration', 'branch', 'loop']],
         ['objective-c', '@interface Queue : NSObject\n@property id tasks;\n@end', ['type', 'declaration']],
         ['cuda-cpp', '__global__ void kernel() {}\nstruct Item {};', ['function', 'type']],
         ['glsl', 'layout(location=0) in vec3 position;\nstruct Vertex { vec3 pos; };', ['declaration', 'type']],
@@ -235,4 +236,37 @@ test('remaining language families expose their own module, type, and control con
         const kinds = analyzeCode(text, language).constructs.map(construct => construct.kind);
         for (const kind of expected) assert.ok(kinds.includes(kind), `${language} missing ${kind}`);
     }
+});
+
+test('every conventional language has a representative structural fixture', () => {
+    const fixtures = {
+        dart: 'class Queue {}', python: 'class Queue:\n    pass', ruby: 'module Queue\nend', cpp: 'struct Queue {};',
+        c: 'struct Queue {};', 'objective-c': '@interface Queue : NSObject\n@end', 'objective-cpp': '@interface Queue : NSObject\n@end',
+        java: 'class Queue {}', csharp: 'record Queue(int Count);', go: 'type Queue struct {}', rust: 'pub struct Queue {}',
+        kotlin: 'data class Queue(val count: Int)', swift: 'struct Queue {}', scala: 'object Queue {}', groovy: 'class Queue {}',
+        php: '<?php namespace Queue;', d: 'module queue;', zig: 'pub const Queue = struct {};', solidity: 'contract Queue {}',
+        'cuda-cpp': '__global__ void run() {}', hlsl: 'cbuffer Params { float value; };', glsl: 'layout(location=0) in vec3 position;',
+        fsharp: 'module Queue', ocaml: 'module Queue = struct end', shellscript: 'function run { :; }',
+        powershell: 'function Invoke-Queue {}', perl: 'package Queue;', r: 'Queue <- function() {}',
+        julia: 'module Queue\nend', elixir: 'defmodule Queue do\nend', coffeescript: 'class Queue',
+        lua: 'local function run() end', sql: 'CREATE TABLE Queue (id INT);', clojure: '(ns queue)',
+        lisp: '(defpackage :queue)', scheme: '(define-library (queue))', haskell: 'module Queue where',
+        erlang: '-module(queue).', matlab: 'classdef Queue\nend', razor: '@using System\nclass Queue {}',
+    };
+    assert.deepEqual(Object.keys(fixtures).sort(), [...ConventionalLanguageIds].sort());
+    const expectedKinds = {
+        dart: 'declaration', python: 'declaration', ruby: 'module', cpp: 'type', c: 'type', 'objective-c': 'type', 'objective-cpp': 'type',
+        java: 'declaration', csharp: 'type', go: 'type', rust: 'type', kotlin: 'declaration', swift: 'type', scala: 'type', groovy: 'declaration',
+        php: 'module', d: 'module', zig: 'type', solidity: 'type', 'cuda-cpp': 'function', hlsl: 'declaration', glsl: 'declaration',
+        fsharp: 'module', ocaml: 'module', shellscript: 'declaration', powershell: 'declaration', perl: 'module', r: 'function',
+        julia: 'module', elixir: 'module', coffeescript: 'declaration', lua: 'declaration', sql: 'declaration', clojure: 'module',
+        lisp: 'module', scheme: 'module', haskell: 'module', erlang: 'module', matlab: 'type', razor: 'declaration',
+    };
+    for (const [language, source] of Object.entries(fixtures)) {
+        const result = analyzeCode(source, language);
+        assert.ok(result.constructs.some(item => item.kind === expectedKinds[language]), `${language} missing ${expectedKinds[language]}`);
+        assert.ok(result.constructs.every(item => item.start >= 0 && item.end <= source.length), `${language} produced an invalid span`);
+    }
+    const java = analyzeCode('class Queue {}', 'java').constructs.filter(item => item.start === 0 && item.end === 5);
+    assert.deepEqual([...new Set(java.map(item => item.kind))], ['declaration']);
 });

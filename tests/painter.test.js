@@ -194,7 +194,7 @@ test('extension activates Dart, repaints both editors, reacts to settings and di
         workspaceState: { get: (name, fallback) => fallback, update: async () => {} } };
     t.after(() => context.subscriptions.forEach(subscription => subscription.dispose()));
     activate(context);
-    const provider = mock.providers.get('bloom.controls');
+    const provider = mock.providers.get('bloom.tree');
     const controls = provider.getChildren(provider.getChildren()[0]);
     assert.deepEqual(controls.slice(0, 3).map(item => item.command.command),
         ['bloom.viewOperational', 'bloom.viewInterfaces', 'bloom.viewStructural']);
